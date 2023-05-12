@@ -147,4 +147,42 @@ class AdventureScene extends Phaser.Scene {
     onEnter() {
         console.warn('This AdventureScene did not implement onEnter():', this.constructor.name);
     }
+
+    // Below are the added methods
+
+    ominous(object) {
+        let glow = object.postFX.addGlow(0x81007f, 0, 0, false, 0.1, 32);
+        object.angle = -1;
+        this.tweens.add({targets: glow, outerStrength: 5, yoyo: true, repeat: 2, duration: 1750, ease: 'sine.inout'});
+        this.tweens.add({targets: object, angle: '+=2', ease: 'Sine', yoyo: true, duration: 50, repeat: 104, onComplete: () => {object.angle = 0}});
+    }
+
+    unwinnablefight(obj_x, obj_y, beast) {
+        let yes = this.add.image(obj_x - 150, obj_y - 200, 'yes') // x, y = 550, 150
+            .setScale(.5)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('Are you sure? It might mean certain death...')
+                })
+            .on('pointerdown', () => {
+                if (this.hasItem('stale french fry')) {
+                    this.showMessage('"THIS IS FOR MY BRETHREN," you say as you plunge your stale french fry straight into its heart');
+                    this.loseItem('stale french fry');
+                    this.tweens.add({targets: [yes, no, beast], alpha: 0, duration: 1000});
+                } else {
+                    this.showMessage('Were you even trying to win?');
+                    this.gotoScene('death');
+                }
+                yes.removeInteractive();
+            });
+        let no = this.add.image(obj_x + 150, obj_y - 200, 'no') // x, y = 850, 150
+            .setScale(.5)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('It will probably be for the better')
+            })
+            .on('pointerdown', () => {
+                this.tweens.add({targets: [yes, no], alpha: 0, duration: 1000});
+            })
+    }
 }
