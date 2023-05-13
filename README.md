@@ -1,4 +1,6 @@
-A simple adventure game by {who?} based on a simple adventure game engine by [Adam Smith](https://github.com/rndmcnlly).
+A simple adventure game by Ewin based on a simple adventure game engine by [Adam Smith](https://github.com/rndmcnlly).
+
+Link to Game: https://senorpapistas.github.io/AdventurePrototype/
 
 Code requirements:
 - **4+ scenes based on `AdventureScene`**: Kitchen, Back Alley, Dangerous Street, Dangerous Forest Path, Hot Dog Stand
