@@ -314,7 +314,17 @@ class HotDogStand extends AdventureScene {
     }
     preload() {
         this.load.path = './assets/';
-        this.load.image('burger', 'bruger.png')
+        this.load.image('burger', 'bruger.png');
+        this.load.image('hotdogstand', 'hotdogstand.png');
+        this.load.image('hotdogbrother', 'longlostbrother.png');
+        this.load.image('endoftime', 'backdoor.png');
+    }
+    onEnter() {
+        let burger = this.add.image(650, 900, 'burger') 
+            .setScale(.4)
+        let hotdogstand = this.add.image(720, 300, 'hotdogstand')
+            .setScale(2)
+            this.tweens.add({targets: hotdogstand, scaleY: 1.5, duration: 0})
     }
 }
 
@@ -326,6 +336,6 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080,
     },
-    scene: [/*Intro, IntroCut, Kitchen, BackAlley, DangerousStreet,*/ DangerousForestPath],
+    scene: [/*Intro, IntroCut, Kitchen, BackAlley, DangerousStreet, DangerousForestPath,*/ HotDogStand],
     title: "burgventure"
 })
