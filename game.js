@@ -129,6 +129,8 @@ class BackAlley extends AdventureScene {
     }
     onEnter() {
         let check = 1;
+        let burger = this.add.image(700, 900, 'burger')
+            .setScale(.4);
         let vanquisher = this.add.image(700, 400, 'vanquisher')
             .setScale(.7)
             .setInteractive()
@@ -147,6 +149,7 @@ class BackAlley extends AdventureScene {
                 this.showMessage('One of 2 ways you can go. This path leads to a dangerous looking street');
             })
             .on('pointerdown', () => {
+                this.tweens.add({targets: burger, x: -500, duration: 1000})
                 this.gotoScene('room3a');
             });
         let right = this.add.image(1300, 600, 'arrow')
@@ -156,9 +159,11 @@ class BackAlley extends AdventureScene {
                 this.showMessage('One of 2 ways you can go. This path leads to a dangerous looking forest path');
             })
             .on('pointerdown', () => {
+                this.tweens.add({targets: burger, scaleX: -.4, duration: 50})
+                this.tweens.add({targets: burger, alpha: 0, x: 1600, duration: 1000})
                 this.gotoScene('room3b');
             });
-    }
+        }
 }
 
 class DangerousStreet extends AdventureScene {
@@ -168,6 +173,148 @@ class DangerousStreet extends AdventureScene {
     preload() {
         this.load.path = './assets/';
         this.load.image('burger', 'bruger.png');
+        this.load.image('arrow', 'arrow.png');
+        this.load.image('moomoo', 'tubby.png');
+        this.load.image('yes', 'yes.png');
+        this.load.image('no', 'no.png');
+        this.load.image('traffic', 'traffic.png');
+    }
+    onEnter() {
+        let burger = this.add.image(1200, 900, 'burger')
+            .setScale(.5);
+        let friend = false;
+        let moomoo = this.add.image(1100, 500, 'moomoo')
+            .setScale(.7)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('a miniature organism')
+            })
+            .on('pointerdown', () => {
+                if (friend == false) {
+                    this.showMessage('You feel a beautiful connection with this organic being, as if you might be related. Would you like to befriend it?')
+                    let yes = this.add.image(1000, 300, 'yes')
+                        .setScale(.4)
+                        .setInteractive()
+                        .on('pointerdown', () => {
+                            this.gainItem('Ally: moomoo')
+                            this.tweens.add({targets: moomoo, angle: 360, duration: 1000})
+                            this.tweens.add({targets: [yes, no], alpha: 0, duration: 1000})
+                            yes.removeInteractive();
+                            no.removeInteractive();
+                            friend = true;
+                        })
+                    let no = this.add.image(1200, 300, 'no')
+                        .setScale(.4)
+                        .setInteractive()
+                        .on('pointerdown', () => {
+                            this.showMessage('How sad')
+                            this.tweens.add({targets: [yes, no, moomoo], alpha: 0, duration: 1000})
+                            yes.removeInteractive();
+                            no.removeInteractive();
+                        })
+                } else {
+                    this.tweens.add({targets: moomoo, angle: 360, duration: 1000})
+                }
+            });
+        let traffic = this.add.image(200, 100, 'traffic')
+            .setScale(1.3)
+            .setAngle(-30)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('you will get smushed');
+            })
+            .on('pointerdown', () => {
+                this.showMessage('you got trampled');
+                this.gotoScene('death');
+            });
+        let arrow = this.add.image(300, 850, 'arrow')
+            .setScale(1)
+            .setAngle(-30)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('It looks like the path to glory and honor')
+            })
+            .on('pointerdown', () => {
+                this.showMessage('You venture forth')
+                this.gotoScene('room 4')
+            });
+    }
+}
+
+class DangerousForestPath extends AdventureScene {
+    constructor() {
+        super('room3b', 'Dangerous Forest Path');
+    }
+    preload() {
+        this.load.path = './assets/';
+        this.load.image('burger', 'bruger.png');
+        this.load.image('arrow', 'arrow.png');
+        this.load.image('yes', 'yes.png');
+        this.load.image('no', 'no.png');
+        this.load.image('soldier', 'soldierofchaos.png');
+    }
+    onEnter() {
+        let check1 = 1;
+        let check2 = 1; 
+        let check3 = 1;
+
+        let burger = this.add.image(200, 900, 'burger')
+            .setScale(.4)
+            this.tweens.add({targets:burger, scaleX: -.4, duration: 0});
+        let soldier1 = this.add.image(280, 270, 'soldier')
+            .setScale(.5)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage("soldier of the ancient one's army")
+                if (check1 == 1) {this.ominous(soldier1); check1--};
+            })
+            .on('pointerdown', () => {
+                this.unwinnablefight(300, 300, soldier1);
+                soldier1.removeInteractive();
+            });
+        let soldier2 = this.add.image(650, 500, 'soldier')
+            .setScale(.5)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage("soldier of the ancient one's army")
+                if (check2 == 1) {this.ominous(soldier2); check2--};
+            })
+            .on('pointerdown', () => {
+                this.unwinnablefight(670, 530, soldier2);
+                soldier2.removeInteractive();
+            });
+        let soldier3 = this.add.image(1150, 270, 'soldier')
+            .setScale(.5)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage("soldier of the ancient one's army")
+                if (check3 == 1) {this.ominous(soldier3); check3--};
+            })
+            .on('pointerdown', () => {
+                this.unwinnablefight(1170, 300, soldier3);
+                soldier3.removeInteractive();
+            });
+        let arrow = this.add.image(1100, 850, 'arrow')
+            .setScale(1)
+            .setAngle(-150)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('It looks like the path to honor and glory')
+            })
+            .on('pointerdown', () => {
+                this.showMessage('You venture forth')
+                this.gotoScene('room 4')
+            });
+    }
+}
+
+class HotDogStand extends AdventureScene {
+    constructor() {
+        super('room4', 'Hot Dog Stand')
+    }
+    preload() {
+        this.load.path = './assets/';
+        this.load.image('burger', 'bruger.png')
     }
 }
 
@@ -179,6 +326,6 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080,
     },
-    scene: [/*Intro, IntroCut,*/ Kitchen, BackAlley],
+    scene: [/*Intro, IntroCut, Kitchen, BackAlley, DangerousStreet,*/ DangerousForestPath],
     title: "burgventure"
 })
