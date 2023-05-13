@@ -59,7 +59,7 @@ class Kitchen extends AdventureScene {
     preload() {
         this.load.path = './assets/';
         this.load.image('table', 'table.png');
-        this.load.image('burger', 'bruger.png');
+        //this.load.image('burger', 'bruger.png');
         this.load.image('counter_td', 'counter_topdown.png');
         this.load.image('backdoor', 'backdoor.png');
         this.load.image('doomdoor', 'doomdoor.png');
@@ -121,7 +121,7 @@ class BackAlley extends AdventureScene {
     }
     preload() {
         this.load.path = './assets/';
-        this.load.image('burger', 'bruger.png');
+        //this.load.image('burger', 'bruger.png');
         this.load.image('vanquisher', 'vanquisher.png');
         this.load.image('arrow', 'arrow.png');
         this.load.image('yes', 'yes.png');
@@ -172,11 +172,11 @@ class DangerousStreet extends AdventureScene {
     }
     preload() {
         this.load.path = './assets/';
-        this.load.image('burger', 'bruger.png');
-        this.load.image('arrow', 'arrow.png');
+        //this.load.image('burger', 'bruger.png');
+        //this.load.image('arrow', 'arrow.png');
         this.load.image('moomoo', 'tubby.png');
-        this.load.image('yes', 'yes.png');
-        this.load.image('no', 'no.png');
+        //this.load.image('yes', 'yes.png');
+        //this.load.image('no', 'no.png');
         this.load.image('traffic', 'traffic.png');
     }
     onEnter() {
@@ -236,7 +236,7 @@ class DangerousStreet extends AdventureScene {
             })
             .on('pointerdown', () => {
                 this.showMessage('You venture forth')
-                this.gotoScene('room 4')
+                this.gotoScene('room4')
             });
     }
 }
@@ -247,10 +247,10 @@ class DangerousForestPath extends AdventureScene {
     }
     preload() {
         this.load.path = './assets/';
-        this.load.image('burger', 'bruger.png');
-        this.load.image('arrow', 'arrow.png');
-        this.load.image('yes', 'yes.png');
-        this.load.image('no', 'no.png');
+        //this.load.image('burger', 'bruger.png');
+        //this.load.image('arrow', 'arrow.png');
+        //this.load.image('yes', 'yes.png');
+        //this.load.image('no', 'no.png');
         this.load.image('soldier', 'soldierofchaos.png');
     }
     onEnter() {
@@ -303,7 +303,7 @@ class DangerousForestPath extends AdventureScene {
             })
             .on('pointerdown', () => {
                 this.showMessage('You venture forth')
-                this.gotoScene('room 4')
+                this.gotoScene('room4')
             });
     }
 }
@@ -314,7 +314,7 @@ class HotDogStand extends AdventureScene {
     }
     preload() {
         this.load.path = './assets/';
-        this.load.image('burger', 'bruger.png');
+        //this.load.image('burger', 'bruger.png');
         this.load.image('hotdogstand', 'hotdogstand.png');
         this.load.image('hotdogbrother', 'longlostbrother.png');
         this.load.image('endoftime', 'backdoor.png');
@@ -324,7 +324,116 @@ class HotDogStand extends AdventureScene {
             .setScale(.4)
         let hotdogstand = this.add.image(720, 300, 'hotdogstand')
             .setScale(2)
-            this.tweens.add({targets: hotdogstand, scaleY: 1.5, duration: 0})
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('A stand of massive proportions');
+            })
+            .on('pointerdown', () => {
+                this.showMessage('Something falls from the stand');
+                this.tweens.add({targets: hotdogbrother, x:300, y: 700, duration: 2500, ease: 'Bounce.easeOut'});
+                hotdogstand.removeInteractive();
+            });
+            this.tweens.add({targets: hotdogstand, scaleY: 1.5, duration: 0});
+        let hotdogbrother = this.add.image(500, -700, 'hotdogbrother') // falls to x, y = 300, 700
+            .setScale(.4)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('Who is that? They look so familiar...');
+            })
+            .on('pointerdown', () => {
+                this.showMessage('You have finally found your long lost brother!');
+                this.gainItem('Ally: brethren');
+                this.tweens.add({targets: hotdogbrother, scaleX: -.4, duration: 300});
+                let endofspace = endoftime.postFX.addGlow(0xffffff, 0, 0, false, 0.1, 32);
+                this.tweens.add({targets: endofspace, outerStrength: 7, yoyo: true, duration: 1750, ease: 'sine.inout'});
+                this.tweens.add({targets: endoftime, alpha: 1, duration: 1000});
+                let hotdogwater = hotdogbrother.postFX.addGlow(0xffffff, 0, 0, false, 0.1, 32);
+                this.tweens.add({targets: hotdogwater, outerStrength: 7, yoyo: true, duration: 1750, ease: 'sine.inout'});
+                this.tweens.add({targets: hotdogbrother, x: '+=100', duration: 1000});
+                hotdogbrother.removeInteractive();
+            });
+        let endoftime = this.add.image(1200, 830, 'endoftime')
+            .setScale(.8)
+            .setAlpha(0)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('The end of time');
+            })
+            .on('pointerdown', () => {
+                if (this.hasItem('Ally: moomoo')) {
+                    this.showMessage('GOOD END');
+                    this.gotoScene('goodend');
+                } else {
+                    this.showMessage('BAD END');
+                    this.gotoScene('badend');
+                }
+            })
+    }
+}
+
+class GoodEnd extends Phaser.Scene {
+    constructor() {
+        super('goodend')
+    }
+    preload() {
+        //this.load.path = './assets/';
+        //this.load.image('moomoo', 'tubby.png');
+        //this.load.image('hotdogbrother', 'longlostbrother.png');
+        //this.load.image('burger', 'bruger.png');
+    }
+    create() {
+        let burger = this.add.image(1300, 300, 'burger')
+            .setScale(1);
+        let moomoo = this.add.image(1600, 650, 'moomoo')
+            .setScale(1);
+        let hotdogbrother = this.add.image(1100, 800, 'hotdogbrother')
+            .setScale(1);
+        this.add.text(400, 400, 'GOOD END', {fontSize: '80px', color: '#00ff00'});
+        this.add.text(405, 500, "\n\nClick to restart", {fontSize: '40px'});
+        this.input.on('pointerdown', () => {
+            this.cameras.main.fade(1000, 0, 0, 0);
+            this.time.delayedCall(1000, () => this.scene.start('intro'));
+        });
+    }
+}
+
+class BadEnd extends Phaser.Scene {
+    constructor() {
+        super('badend')
+    }
+    preload() {
+        //this.load.path = './assets/';
+        //this.load.image('vanquisher', 'vanquisher.png');
+    }
+    create() {
+        let vanquisher = this.add.image(1200, 700, 'vanquisher')
+            .setScale(2.5);
+        this.add.text(400, 400, 'BAD END', {fontSize: '80px', color: '#ff0000'});
+        this.add.text(380, 500, "\n\nClick to restart", {fontSize: '40px'});
+        this.input.on('pointerdown', () => {
+            this.cameras.main.fade(1000, 0, 0, 0);
+            this.time.delayedCall(1000, () => this.scene.start('intro'));
+        });
+    }
+}
+
+class Death extends Phaser.Scene {
+    constructor() {
+        super('death')
+    }
+    preload() {
+        this.load.path = './assets/';
+        this.load.image('soldierofchaos', 'soldierofchaos.png');
+    }
+    create() {
+        let vanquisher = this.add.image(1400, 700, 'soldierofchaos')
+            .setScale(2);
+        this.add.text(300, 400, 'YOU ARE DEAD', {fontSize: '80px', color: '#ffff00'});
+        this.add.text(380, 500, "\n\nClick to restart", {fontSize: '40px'});
+        this.input.on('pointerdown', () => {
+            this.cameras.main.fade(1000, 0, 0, 0);
+            this.time.delayedCall(1000, () => this.scene.start('intro'));
+        });
     }
 }
 
@@ -336,6 +445,6 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080,
     },
-    scene: [/*Intro, IntroCut, Kitchen, BackAlley, DangerousStreet, DangerousForestPath,*/ HotDogStand],
-    title: "burgventure"
+    scene: [Intro, IntroCut, Kitchen, BackAlley, DangerousStreet, DangerousForestPath, HotDogStand, GoodEnd, BadEnd, Death],
+    title: "BurgVenture"
 })
